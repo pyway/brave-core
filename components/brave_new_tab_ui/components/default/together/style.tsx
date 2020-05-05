@@ -4,7 +4,7 @@
 
 import styled from 'styled-components'
 import palette from 'brave-ui/theme/colors'
- 
+
 export const WidgetWrapper = styled<{}, 'div'>('div')`
   color: white;
   padding: 6px 20px 12px 20px;
@@ -85,8 +85,8 @@ export const CallButton = styled<{}, 'button'>('button')`
 export const TogetherIcon = styled<{}, 'div'>('div')`
   width: 24px;
   height: 24px;
-  margin-right: 11px;
-  margin-left: -2px;
+  margin-right: 7px;
+  margin-left: 5px;
 `
 
 export const StyledTitle = styled<{}, 'div'>('div')`

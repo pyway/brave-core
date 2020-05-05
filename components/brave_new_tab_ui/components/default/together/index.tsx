@@ -84,7 +84,7 @@ class Together extends React.PureComponent<TogetherProps, {}> {
               {getLocale('togetherWidgetRoomNameLabel')}
             </InputLabel>
             <NameInputWrapper>
-              <NameInputField placeholder={'coolroom'}></NameInputField>
+              <NameInputField placeholder={'coolroom'}/>
             </NameInputWrapper>
             <ActionsWrapper>
               <CallButton onClick={this.shouldCreateCall}>

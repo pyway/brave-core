@@ -54,7 +54,7 @@ export const defaultState: NewTab.State = {
   currentStackWidget: '',
   removedStackWidgets: [],
   // Order is ascending, with last entry being in the foreground
-  widgetStackOrder: ['binance', 'rewards'],
+  widgetStackOrder: ['together', 'binance', 'rewards'],
   binanceState: {
     userTLD: 'com',
     initialFiat: 'USD',

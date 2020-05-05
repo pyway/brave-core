@@ -128,16 +128,21 @@ class NewTabPage extends React.Component<Props, State> {
     // Handles updates from brave://settings/newTab
     const oldShowRewards = prevProps.newTabData.showRewards
     const oldShowBinance = prevProps.newTabData.showBinance
-    const { showRewards, showBinance } = this.props.newTabData
+    const oldShowTogether = prevProps.newTabData.showTogether
+    const { showRewards, showBinance, showTogether } = this.props.newTabData
 
     if (!oldShowRewards && showRewards) {
       this.props.actions.setForegroundStackWidget('rewards')
     } else if (!oldShowBinance && showBinance) {
       this.props.actions.setForegroundStackWidget('binance')
+    } else if (!oldShowTogether && showTogether) {
+      this.props.actions.setForegroundStackWidget('together')
     } else if (oldShowRewards && !showRewards) {
       this.props.actions.removeStackWidget('rewards')
     } else if (oldShowBinance && !showBinance) {
       this.props.actions.removeStackWidget('binance')
+    } else if (oldShowTogether && !showTogether) {
+      this.props.actions.removeStackWidget('together')
     }
   }
 
@@ -214,24 +219,15 @@ class NewTabPage extends React.Component<Props, State> {
   }
 
   toggleShowTogether = () => {
-    const {
-      currentStackWidget,
-      showBinance,
-      showTogether,
-      showRewards
-    } = this.props.newTabData
+    const { showTogether } = this.props.newTabData
 
-    if (currentStackWidget === 'together' && showTogether) {
-      this.props.actions.setCurrentStackWidget('rewards')
-    } else if (!showBinance) {
-      this.props.actions.setCurrentStackWidget('rewards')
-    } else if (!showTogether) {
-      this.props.actions.setCurrentStackWidget('together')
-    } else if (!showRewards) {
-      this.props.actions.setCurrentStackWidget('rewards')
+    if (showTogether) {
+      this.removeStackWidget('together')
+    } else {
+      this.setForegroundStackWidget('together')
     }
 
-    this.props.saveShowRewards(!showTogether)
+    this.props.saveShowTogether(!showTogether)
   }
 
   toggleShowBinance = () => {
@@ -254,7 +250,7 @@ class NewTabPage extends React.Component<Props, State> {
   }
 
   createTogetherCall = (name: string) => {
-
+    console.log('todo')
   }
 
   onBinanceClientUrl = (clientUrl: string) => {
@@ -466,7 +462,8 @@ class NewTabPage extends React.Component<Props, State> {
     const { widgetStackOrder } = this.props.newTabData
     const renderLookup = {
       'rewards': this.renderRewardsWidget.bind(this),
-      'binance': this.renderBinanceWidget.bind(this)
+      'binance': this.renderBinanceWidget.bind(this),
+      'together': this.renderTogetherWidget.bind(this)
     }
 
     return (
@@ -550,12 +547,13 @@ class NewTabPage extends React.Component<Props, State> {
 
     return (
       <Together
+        isCrypto={true}
         menuPosition={'left'}
         widgetTitle={getLocale('togetherWidgetTitle')}
         textDirection={textDirection}
         hideWidget={this.toggleShowTogether}
         showContent={showContent}
-        onShowContent={this.toggleStackWidget.bind(this, 'together')}
+        onShowContent={this.setForegroundStackWidget.bind(this, 'together')}
         onCreateCall={this.createTogetherCall}
       />
     )
