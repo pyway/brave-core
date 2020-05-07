@@ -69,7 +69,7 @@ class Together extends React.PureComponent<Props, State> {
     )
   }
 
-  uuidv4() {
+  roomname() {
     return 'bxxxxxxx'.replace(/[xy]/g, (c) => {
       let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
       return v.toString(16)
@@ -82,7 +82,7 @@ class Together extends React.PureComponent<Props, State> {
     let { room } = this.state
 
     if (!room) {
-      room = this.uuidv4()
+      room = this.roomname()
     }
 
     window.open(`https://together.brave.com/${room}`, '_self')
