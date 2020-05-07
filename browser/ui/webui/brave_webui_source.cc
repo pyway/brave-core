@@ -234,6 +234,7 @@ void CustomizeWebUIHTMLSource(const std::string &name,
         { "togetherWidgetTitle", IDS_TOGETHER_WIDGET_TITLE},
         { "togetherWidgetWelcomeTitle", IDS_TOGETHER_WIDGET_WELCOME_TITLE},
         { "togetherWidgetRoomNameLabel", IDS_TOGETHER_WIDGET_ROOM_NAME_LABEL},
+        { "togetherWidgetNamePlaceholder", IDS_TOGETHER_WIDGET_NAME_PLACEHOLDER},
         { "togetherWidgetStartButton", IDS_TOGETHER_WIDGET_START_BUTTON},
         // Binance Widget
         { "binanceWidgetBuy", IDS_BINANCE_WIDGET_BUY },

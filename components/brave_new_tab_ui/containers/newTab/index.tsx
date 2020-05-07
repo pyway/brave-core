@@ -554,7 +554,6 @@ class NewTabPage extends React.Component<Props, State> {
         hideWidget={this.toggleShowTogether}
         showContent={showContent}
         onShowContent={this.setForegroundStackWidget.bind(this, 'together')}
-        onCreateCall={this.createTogetherCall}
       />
     )
   }

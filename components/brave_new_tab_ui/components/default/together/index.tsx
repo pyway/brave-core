@@ -3,6 +3,7 @@
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
+// import { v3 as uuidv3 } from 'uuid'
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
 
@@ -23,13 +24,24 @@ import {
 import { StyledTitleTab } from '../widgetTitleTab'
 import BraveTogetherIcon from './assets/brave-together-icon'
 
-export interface TogetherProps {
+interface Props {
   showContent: boolean
   onShowContent: () => void
-  onCreateCall: (name: string) => void
 }
 
-class Together extends React.PureComponent<TogetherProps, {}> {
+interface State {
+  room: string
+}
+
+class Together extends React.PureComponent<Props, State> {
+
+  constructor (props: Props) {
+    super(props)
+    this.state = {
+      room: ''
+    }
+    console.log(this.state)
+  }
 
   getButtonText = () => {
     return getLocale('togetherWidgetStartButton')
@@ -60,8 +72,22 @@ class Together extends React.PureComponent<TogetherProps, {}> {
     )
   }
 
-  shouldCreateCall = () => {
-    this.props.onCreateCall('coolroom')
+  shouldCreateCall(event: any) {
+    event.preventDefault();
+
+    var { room } = this.state
+
+    if (!room || room == '') {
+      room = 'coolroom';
+    }
+    
+    window.open(`https://together.brave.com/${room}`, '_self')
+  }
+
+  nameChanged = ({ target }: any) => {
+    this.setState({
+      room: target.value
+    }) 
   }
 
   render () {
@@ -80,12 +106,18 @@ class Together extends React.PureComponent<TogetherProps, {}> {
             <WelcomeText>
               {getLocale('togetherWidgetWelcomeTitle')}
             </WelcomeText>
-            <InputLabel>
-              {getLocale('togetherWidgetRoomNameLabel')}
-            </InputLabel>
-            <NameInputWrapper>
-              <NameInputField placeholder={'coolroom'}/>
-            </NameInputWrapper>
+            <form onSubmit={this.shouldCreateCall}>
+              <InputLabel>
+                {getLocale('togetherWidgetRoomNameLabel')}
+              </InputLabel>
+              <NameInputWrapper>
+                <NameInputField 
+                  pattern={'^[^?&:\u0022\u0027%#]+$'} 
+                  placeholder={getLocale('togetherWidgetNamePlaceholder')}
+                  onChange={this.nameChanged}
+                />
+              </NameInputWrapper>
+            </form>
             <ActionsWrapper>
               <CallButton onClick={this.shouldCreateCall}>
                 {getLocale('togetherWidgetStartButton')}

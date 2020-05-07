@@ -14,7 +14,8 @@ export const WidgetWrapper = styled<{}, 'div'>('div')`
   overflow: hidden;
   min-width: 284px;
   min-height: initial;
-  background-image: linear-gradient(140deg, #1F2327 0%, #000000 85%);
+  backdrop-filter: blur(23px);
+  background: rgba(33, 37, 41, 0.25);
 `
 
 export const Header = styled<{}, 'div'>('div')`
@@ -22,15 +23,18 @@ export const Header = styled<{}, 'div'>('div')`
 `
 
 export const Content = styled<{}, 'div'>('div')`
-  margin: 10px 0;
-  min-width: 255px;
+  margin: 20px 0;
+  min-width: 200px;
 `
 
 export const WelcomeText = styled<{}, 'span'>('span')`
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
+  text-align: center;
   color: ${palette.white};
+  max-width: 80%;
+  margin: 0 auto;
 `
 
 export const InputLabel = styled<{}, 'span'>('span')`
@@ -38,17 +42,19 @@ export const InputLabel = styled<{}, 'span'>('span')`
   font-size: 12px;
   font-weight: 400;
   color: ${palette.white};
+  margin-top: 20px;
+  padding: 5px;
 `
 
 export const NameInputWrapper = styled<{}, 'div'>('div')`
-  height: 30px;
-  border: 1px solid rgb(70, 70, 70);
+  height: 32px;
   margin-bottom: 10px;
+  text-align: center;
 `
 
 export const NameInputField = styled<{}, 'input'>('input')`
   display: inline-block;
-  min-width: 223px;
+  min-width: 240px;
   height: 32px;
   vertical-align: top;
   border: none;
@@ -57,10 +63,15 @@ export const NameInputField = styled<{}, 'input'>('input')`
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 4px;
   padding-left: 5px;
+  margin: 0 auto;
 
   &:focus {
     outline: 0;
     border: 1px solid rgba(255, 255, 255, 1.0);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
   }
 `
 
@@ -73,13 +84,17 @@ export const CallButton = styled<{}, 'button'>('button')`
   font-size: 14px;
   font-weight: bold;
   border-radius: 20px;
-  width: 100%;
   background: ${palette.blurple500};
   border: 0;
-  padding: 10px 60px;
+  padding: 10px 30px;
   cursor: pointer;
   color: ${palette.white};
   margin-top: 20px;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
 `
 
 export const TogetherIcon = styled<{}, 'div'>('div')`
@@ -87,6 +102,7 @@ export const TogetherIcon = styled<{}, 'div'>('div')`
   height: 24px;
   margin-right: 7px;
   margin-left: 5px;
+  margin-top: 2px;
 `
 
 export const StyledTitle = styled<{}, 'div'>('div')`
