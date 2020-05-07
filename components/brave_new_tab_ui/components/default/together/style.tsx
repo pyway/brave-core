@@ -15,7 +15,7 @@ export const WidgetWrapper = styled<{}, 'div'>('div')`
   min-width: 284px;
   min-height: initial;
   backdrop-filter: blur(23px);
-  background: rgba(33, 37, 41, 0.25);
+  background: rgba(33, 37, 41, 0.2);
 `
 
 export const Header = styled<{}, 'div'>('div')`
@@ -35,44 +35,6 @@ export const WelcomeText = styled<{}, 'span'>('span')`
   color: ${palette.white};
   max-width: 80%;
   margin: 0 auto;
-`
-
-export const InputLabel = styled<{}, 'span'>('span')`
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: ${palette.white};
-  margin-top: 20px;
-  padding: 5px;
-`
-
-export const NameInputWrapper = styled<{}, 'div'>('div')`
-  height: 32px;
-  margin-bottom: 10px;
-  text-align: center;
-`
-
-export const NameInputField = styled<{}, 'input'>('input')`
-  display: inline-block;
-  min-width: 240px;
-  height: 32px;
-  vertical-align: top;
-  border: none;
-  color: ${palette.white};
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 4px;
-  padding-left: 5px;
-  margin: 0 auto;
-
-  &:focus {
-    outline: 0;
-    border: 1px solid rgba(255, 255, 255, 1.0);
-  }
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
 `
 
 export const ActionsWrapper = styled<{}, 'div'>('div')`

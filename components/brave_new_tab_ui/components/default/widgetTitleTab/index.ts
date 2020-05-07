@@ -10,11 +10,22 @@ export const StyledTitleTab = styled<{}, 'div'>('div')`
   padding: 4px 20px 15px 20px;
   margin-bottom: -8px;
   backdrop-filter: blur(23px);
-  background: linear-gradient(45deg, rgba(33, 37, 41, 0.28) 0%, rgba(33, 37, 41, 0.22) 100%);
+  background: linear-gradient(90deg, rgba(33, 37, 41, 0.1) 0%, rgba(33, 37, 41, 0.22) 100%);
   border-radius: 8px 8px 0 0;
-  box-shadow: rgba(0, 0, 0, 0.15) 1px 1px 20px 2px;
 
   &:first-child {
-    background: linear-gradient(45deg, rgba(33, 37, 41, 0.22) 0%, rgba(33, 37, 41, 0.2) 100%);
+    background: linear-gradient(90deg, rgba(33, 37, 41, 1) 0%, rgba(33, 37, 41, 0.4) 100%);
+  }
+
+  &:nth-child(1) {
+    background: linear-gradient(90deg, rgba(33, 37, 41, 0.8) 0%, rgba(33, 37, 41, 0.32) 100%);
+  }
+
+  &:nth-child(2) {
+    background: linear-gradient(90deg, rgba(33, 37, 41, 0.6) 0%, rgba(33, 37, 41, 0.24) 100%);
+  }
+
+  &:nth-child(3) {
+    background: linear-gradient(90deg, rgba(33, 37, 41, 0.4) 0%, rgba(33, 37, 41, 0.16) 100%);
   }
 `

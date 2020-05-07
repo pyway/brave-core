@@ -12,9 +12,6 @@ import {
   Header,
   Content,
   WelcomeText,
-  InputLabel,
-  NameInputWrapper,
-  NameInputField,
   ActionsWrapper,
   CallButton,
   TogetherIcon,
@@ -73,7 +70,7 @@ class Together extends React.PureComponent<Props, State> {
   }
 
   uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    return 'bxxxxxxx'.replace(/[xy]/g, (c) => {
       let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
       return v.toString(16)
     })
@@ -89,12 +86,6 @@ class Together extends React.PureComponent<Props, State> {
     }
 
     window.open(`https://together.brave.com/${room}`, '_self')
-  }
-
-  nameChanged = ({ target }: any) => {
-    this.setState({
-      room: target.value
-    })
   }
 
   render () {
@@ -113,18 +104,6 @@ class Together extends React.PureComponent<Props, State> {
             <WelcomeText>
               {getLocale('togetherWidgetWelcomeTitle')}
             </WelcomeText>
-            <form onSubmit={this.shouldCreateCall}>
-              <InputLabel>
-                {getLocale('togetherWidgetRoomNameLabel')}
-              </InputLabel>
-              <NameInputWrapper>
-                <NameInputField
-                  pattern={'^[^?&:\u0022\u0027%#]+$'}
-                  placeholder={getLocale('togetherWidgetNamePlaceholder')}
-                  onChange={this.nameChanged}
-                />
-              </NameInputWrapper>
-            </form>
             <ActionsWrapper>
               <CallButton onClick={this.shouldCreateCall}>
                 {getLocale('togetherWidgetStartButton')}
