@@ -72,22 +72,22 @@ class Together extends React.PureComponent<Props, State> {
     )
   }
 
-  shouldCreateCall(event: any) {
-    event.preventDefault();
+  shouldCreateCall = (event: any) => {
+    event.preventDefault()
 
-    var { room } = this.state
+    let { room } = this.state
 
-    if (!room || room == '') {
-      room = 'coolroom';
+    if (!room) {
+      room = 'coolroom'
     }
-    
+
     window.open(`https://together.brave.com/${room}`, '_self')
   }
 
   nameChanged = ({ target }: any) => {
     this.setState({
       room: target.value
-    }) 
+    })
   }
 
   render () {
@@ -111,8 +111,8 @@ class Together extends React.PureComponent<Props, State> {
                 {getLocale('togetherWidgetRoomNameLabel')}
               </InputLabel>
               <NameInputWrapper>
-                <NameInputField 
-                  pattern={'^[^?&:\u0022\u0027%#]+$'} 
+                <NameInputField
+                  pattern={'^[^?&:\u0022\u0027%#]+$'}
                   placeholder={getLocale('togetherWidgetNamePlaceholder')}
                   onChange={this.nameChanged}
                 />

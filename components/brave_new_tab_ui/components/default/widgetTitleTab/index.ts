@@ -15,6 +15,6 @@ export const StyledTitleTab = styled<{}, 'div'>('div')`
   box-shadow: rgba(0, 0, 0, 0.15) 1px 1px 20px 2px;
 
   &:first-child {
-    background: linear-gradient(45deg, rgba(33, 37, 41, 0.22) 0%, rgba(33, 37, 41, 0.2) 100%); 
+    background: linear-gradient(45deg, rgba(33, 37, 41, 0.22) 0%, rgba(33, 37, 41, 0.2) 100%);
   }
 `
