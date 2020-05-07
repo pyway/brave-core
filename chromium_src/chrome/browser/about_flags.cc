@@ -15,6 +15,7 @@
 #include "components/prefs/pref_service.h"
 
 using brave_shields::features::kBraveAdblockCosmeticFiltering;
+using brave_shields::features::kBrave1pCosmeticFiltering;
 using brave_sync::features::kBraveSync;
 using ntp_background_images::features::kBraveNTPBrandedWallpaper;
 using ntp_background_images::features::kBraveNTPBrandedWallpaperDemo;
@@ -37,6 +38,10 @@ using ntp_background_images::features::kBraveNTPSuperReferralWallpaper;
      flag_descriptions::kBraveAdblockCosmeticFilteringName,                \
      flag_descriptions::kBraveAdblockCosmeticFilteringDescription, kOsAll, \
      FEATURE_VALUE_TYPE(kBraveAdblockCosmeticFiltering)},                  \
+    {"brave-1p-cosmetic-filtering",                                        \
+     flag_descriptions::kBrave1pCosmeticFilteringName,                     \
+     flag_descriptions::kBrave1pCosmeticFilteringDescription, kOsAll,      \
+     FEATURE_VALUE_TYPE(kBrave1pCosmeticFiltering)},                       \
     {"brave-sync",                                                         \
      flag_descriptions::kBraveSyncName,                                    \
      flag_descriptions::kBraveSyncDescription, kOsDesktop,                 \

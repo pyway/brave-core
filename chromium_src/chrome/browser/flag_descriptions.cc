@@ -24,6 +24,10 @@ const char kBraveNTPBrandedWallpaperDemoDescription[] =
 const char kBraveAdblockCosmeticFilteringName[] = "Enable cosmetic filtering";
 const char kBraveAdblockCosmeticFilteringDescription[] =
     "Enable support for cosmetic filtering";
+const char kBrave1pCosmeticFilteringName[] =
+    "Enable first-party cosmetic filtering";
+const char kBrave1pCosmeticFilteringDescription[] =
+    "Hide first party elements like sponsored or promoted content";
 const char kBraveSyncName[] = "Enable Brave Sync";
 const char kBraveSyncDescription[] = "Brave Sync is disabled by default";
 const char kBraveSuperReferralName[] = "Enable Brave Super Referral";
