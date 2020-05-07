@@ -572,14 +572,26 @@ void Client::SetVersionCode(
 
 ///////////////////////////////////////////////////////////////////////////////
 
+std::string Client::GetPath() const {
+  const std::string path = ads_client_->GetPath();
+  base::FilePath file_path(path);
+
+  file_path.AppendASCII("client.json");
+
+  return file_path.value();
+}
+
 void Client::SaveState() {
   if (!is_initialized_) {
     return;
   }
 
+  const std::string path = GetPath();
+
   auto json = client_state_->ToJson();
+
   auto callback = std::bind(&Client::OnStateSaved, this, _1);
-  ads_client_->Save(_client_resource_name, json, callback);
+  ads_client_->Save(path, json, callback);
 }
 
 void Client::OnStateSaved(
@@ -594,8 +606,9 @@ void Client::OnStateSaved(
 }
 
 void Client::LoadState() {
+  const std::string path = GetPath();
   auto callback = std::bind(&Client::OnStateLoaded, this, _1, _2);
-  ads_client_->Load(_client_resource_name, callback);
+  ads_client_->Load(path, callback);
 }
 
 void Client::OnStateLoaded(
