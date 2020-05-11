@@ -212,8 +212,8 @@ class ADS_EXPORT Ads {
       const std::string& creative_set_id,
       const bool flagged) = 0;
 
-  // TODO(Moritz Haller): Ddd description
-  virtual void OnUserModelUpdated(
+  // TODO(Moritz Haller): Description
+  virtual void OnUserModelFilesUpdated(
       const std::string& model_id,
       const std::string& model_path) = 0;
 
