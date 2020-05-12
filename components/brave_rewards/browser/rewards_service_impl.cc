@@ -1764,7 +1764,7 @@ void RewardsServiceImpl::GetPublisherMinVisitTime(
 }
 
 void RewardsServiceImpl::SetPublisherMinVisitTime(
-    uint64_t duration_in_seconds) const {
+    int duration_in_seconds) const {
   if (!Connected()) {
     return;
   }
@@ -1781,7 +1781,7 @@ void RewardsServiceImpl::GetPublisherMinVisits(
   bat_ledger_->GetPublisherMinVisits(callback);
 }
 
-void RewardsServiceImpl::SetPublisherMinVisits(unsigned int visits) const {
+void RewardsServiceImpl::SetPublisherMinVisits(int visits) const {
   if (!Connected()) {
     return;
   }
