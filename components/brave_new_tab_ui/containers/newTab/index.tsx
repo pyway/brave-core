@@ -249,10 +249,6 @@ class NewTabPage extends React.Component<Props, State> {
     }
   }
 
-  createTogetherCall = (name: string) => {
-    console.log('todo')
-  }
-
   onBinanceClientUrl = (clientUrl: string) => {
     this.props.actions.onBinanceClientUrl(clientUrl)
   }

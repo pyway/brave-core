@@ -3,7 +3,6 @@
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
-// import { v3 as uuidv3 } from 'uuid'
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
 
@@ -26,19 +25,7 @@ interface Props {
   onShowContent: () => void
 }
 
-interface State {
-  room: string
-}
-
-class Together extends React.PureComponent<Props, State> {
-
-  constructor (props: Props) {
-    super(props)
-    this.state = {
-      room: ''
-    }
-    console.log(this.state)
-  }
+class Together extends React.PureComponent<Props, {}> {
 
   getButtonText = () => {
     return getLocale('togetherWidgetStartButton')
@@ -69,7 +56,7 @@ class Together extends React.PureComponent<Props, State> {
     )
   }
 
-  roomname() {
+  newRoom() {
     return 'bxxxxxxx'.replace(/[xy]/g, (c) => {
       let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
       return v.toString(16)
@@ -78,14 +65,7 @@ class Together extends React.PureComponent<Props, State> {
 
   shouldCreateCall = (event: any) => {
     event.preventDefault()
-
-    let { room } = this.state
-
-    if (!room) {
-      room = this.roomname()
-    }
-
-    window.open(`https://together.brave.com/${room}`, '_self')
+    window.open(`https://together.brave.com/${this.newRoom()}`, '_self')
   }
 
   render () {
