@@ -122,7 +122,7 @@ void StateMigration::OnLoadState(
   ledger::BalanceReportInfoList reports;
   legacy_publisher_->GetAllBalanceReports(&reports);
   if (!reports.empty()) {
-    auto save_callback = std::bind(&StateMigration::OnBalanceReportsSaved,
+    auto save_callback = std::bind(&StateMigration::BalanceReportsSaved,
       this,
       _1,
       callback);
@@ -131,20 +131,42 @@ void StateMigration::OnLoadState(
     return;
   }
 
-  // TODO(nejc): migrate processed publishers in db
-
-  callback(ledger::Result::LEDGER_OK);
+  SaveProcessedPublishers(callback);
 }
 
-void StateMigration::OnBalanceReportsSaved(
+void StateMigration::BalanceReportsSaved(
     const ledger::Result result,
     ledger::ResultCallback callback) {
   if (result != ledger::Result::LEDGER_OK) {
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR) <<
+        "Balance report save failed";
     callback(result);
     return;
   }
 
-  // TODO(nejc): migrate processed publishers in db
+  SaveProcessedPublishers(callback);
+}
+
+void StateMigration::SaveProcessedPublishers(ledger::ResultCallback callback) {
+  auto save_callback = std::bind(&StateMigration::ProcessedPublisherSaved,
+    this,
+    _1,
+    callback);
+
+  ledger_->SaveProcessedPublisherList(
+      legacy_publisher_->GetAlreadyProcessedPublishers(),
+      save_callback);
+}
+
+void StateMigration::ProcessedPublisherSaved(
+    const ledger::Result result,
+    ledger::ResultCallback callback) {
+  if (result != ledger::Result::LEDGER_OK) {
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR) <<
+        "Processed publisher save failed";
+    callback(result);
+    return;
+  }
 
   callback(ledger::Result::LEDGER_OK);
 }
