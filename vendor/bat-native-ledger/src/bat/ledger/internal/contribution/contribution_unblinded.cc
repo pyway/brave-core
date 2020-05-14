@@ -6,13 +6,15 @@
 #include <utility>
 
 #include "base/json/json_writer.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/values.h"
 #include "bat/ledger/internal/bat_util.h"
+#include "bat/ledger/internal/common/bind_util.h"
 #include "bat/ledger/internal/common/time_util.h"
-#include "bat/ledger/internal/ledger_impl.h"
-#include "bat/ledger/internal/contribution/contribution_unblinded.h"
 #include "bat/ledger/internal/contribution/contribution_sku.h"
+#include "bat/ledger/internal/contribution/contribution_unblinded.h"
 #include "bat/ledger/internal/contribution/contribution_util.h"
+#include "bat/ledger/internal/ledger_impl.h"
 #include "bat/ledger/internal/request/request_promotion.h"
 #include "brave_base/random.h"
 #include "net/http/http_status_code.h"
@@ -198,9 +200,74 @@ void Unblinded::PrepareTokens(
     return;
   }
 
-  // TODO(https://github.com/brave/brave-browser/issues/8887):
-  // we should reserve this tokens and add step STEP_RESERVE
-  PreparePublishers(token_list, std::move(contribution), types, callback);
+  const std::string contribution_id = contribution->contribution_id;
+  const std::string contribution_string =
+      braveledger_bind_util::FromContributionToString(std::move(contribution));
+
+  auto save_callback = std::bind(&Unblinded::ReserveStepSaved,
+      this,
+      _1,
+      token_list,
+      contribution_id,
+      contribution_string,
+      types,
+      callback);
+
+  ledger_->UpdateContributionInfoStep(
+      contribution_id,
+      ledger::ContributionStep::STEP_RESERVE,
+      save_callback);
+}
+
+void Unblinded::ReserveStepSaved(
+  const ledger::Result result,
+  const std::vector<ledger::UnblindedToken>& list,
+  const std::string& contribution_id,
+  const std::string& contribution_string,
+  const std::vector<ledger::CredsBatchType>& types,
+  ledger::ResultCallback callback) {
+  if (result != ledger::Result::LEDGER_OK) {
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR) << "Reserve step was not saved";
+    callback(ledger::Result::RETRY);
+    return;
+  }
+
+  auto reserved_callback = std::bind(
+      &Unblinded::OnMarkUnblindedTokensAsReserved,
+      this,
+      _1,
+      list,
+      contribution_string,
+      types,
+      callback);
+
+  std::vector<std::string> token_id_list;
+  for (const auto& item : list) {
+    token_id_list.push_back(base::NumberToString(item.id));
+  }
+
+  ledger_->MarkUnblindedTokensAsReserved(
+      token_id_list,
+      contribution_id,
+      reserved_callback);
+}
+
+void Unblinded::OnMarkUnblindedTokensAsReserved(
+  const ledger::Result result,
+  const std::vector<ledger::UnblindedToken>& list,
+  const std::string& contribution_string,
+  const std::vector<ledger::CredsBatchType>& types,
+  ledger::ResultCallback callback) {
+  if (result != ledger::Result::LEDGER_OK) {
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR)
+        << "Failed to reserve unblinded tokens";
+    callback(ledger::Result::LEDGER_ERROR);
+    return;
+  }
+
+  auto contribution = braveledger_bind_util::FromStringToContribution(
+      contribution_string);
+  PreparePublishers(list, std::move(contribution), types, callback);
 }
 
 void Unblinded::PreparePublishers(

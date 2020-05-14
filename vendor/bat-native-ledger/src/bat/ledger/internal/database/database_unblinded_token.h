@@ -34,6 +34,15 @@ class DatabaseUnblindedToken: public DatabaseTable {
       const std::string& redeem_id,
       ledger::ResultCallback callback);
 
+  void MarkRecordListAsReserved(
+      const std::vector<std::string>& ids,
+      const std::string& redeem_id,
+      ledger::ResultCallback callback);
+
+  void MarkRecordListAsUnreserved(
+      const std::string& redeem_id,
+      ledger::ResultCallback callback);
+
   void GetSpendableRecordListByBatchTypes(
       const std::vector<ledger::CredsBatchType>& batch_types,
       ledger::GetUnblindedTokenListCallback callback);
@@ -53,6 +62,8 @@ class DatabaseUnblindedToken: public DatabaseTable {
 
   bool CreateIndexV20(ledger::DBTransaction* transaction);
 
+  bool CreateIndexV22(ledger::DBTransaction* transaction);
+
   bool MigrateToV10(ledger::DBTransaction* transaction);
 
   bool MigrateToV14(ledger::DBTransaction* transaction);
@@ -63,9 +74,16 @@ class DatabaseUnblindedToken: public DatabaseTable {
 
   bool MigrateToV20(ledger::DBTransaction* transaction);
 
+  bool MigrateToV22(ledger::DBTransaction* transaction);
+
   void OnGetRecords(
       ledger::DBCommandResponsePtr response,
       ledger::GetUnblindedTokenListCallback callback);
+
+  void OnMarkRecordListAsReserved(
+      ledger::DBCommandResponsePtr response,
+      size_t expected_row_count,
+      ledger::ResultCallback callback);
 };
 
 }  // namespace braveledger_database

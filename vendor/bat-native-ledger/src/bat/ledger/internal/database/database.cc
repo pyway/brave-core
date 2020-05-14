@@ -497,7 +497,7 @@ void Database::SaveUnblindedTokenList(
   unblinded_token_->InsertOrUpdateList(std::move(list), callback);
 }
 
-void Database::MarkUblindedTokensAsSpent(
+void Database::MarkUnblindedTokensAsSpent(
     const std::vector<std::string>& ids,
     ledger::RewardsType redeem_type,
     const std::string& redeem_id,
@@ -505,6 +505,24 @@ void Database::MarkUblindedTokensAsSpent(
   unblinded_token_->MarkRecordListAsSpent(
       ids,
       redeem_type,
+      redeem_id,
+      callback);
+}
+
+void Database::MarkUnblindedTokensAsReserved(
+    const std::vector<std::string>& ids,
+    const std::string& redeem_id,
+    ledger::ResultCallback callback) {
+  unblinded_token_->MarkRecordListAsReserved(
+      ids,
+      redeem_id,
+      callback);
+}
+
+void Database::MarkUnblindedTokensAsUnreserved(
+    const std::string& redeem_id,
+    ledger::ResultCallback callback) {
+  unblinded_token_->MarkRecordListAsUnreserved(
       redeem_id,
       callback);
 }

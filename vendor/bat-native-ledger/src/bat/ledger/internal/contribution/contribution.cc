@@ -692,11 +692,13 @@ void Contribution::SetRetryCounter(ledger::ContributionInfoPtr contribution) {
   }
 
   if (contribution->retry_count == 3) {
-    ledger_->ContributionCompleted(
-        ledger::Result::LEDGER_ERROR,
-        contribution->amount,
+    auto callback = std::bind(&Contribution::OnMarkUnblindedTokensAsUnreserved,
+        this,
+        _1,
+        braveledger_bind_util::FromContributionToString(contribution->Clone()));
+    ledger_->MarkUnblindedTokensAsUnreserved(
         contribution->contribution_id,
-        contribution->type);
+        callback);
     return;
   }
 
@@ -710,6 +712,27 @@ void Contribution::SetRetryCounter(ledger::ContributionInfoPtr contribution) {
       contribution->step,
       contribution->retry_count + 1,
       save_callback);
+}
+
+void Contribution::OnMarkUnblindedTokensAsUnreserved(
+    const ledger::Result result,
+    const std::string& contribution_string) {
+  auto contribution = braveledger_bind_util::FromStringToContribution(
+      contribution_string);
+
+  if (result != ledger::Result::LEDGER_OK) {
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR)
+        << "Failed to mark unblinded tokens as unreserved for contribution "
+        << contribution->contribution_id;
+  }
+
+  // Even if we can't mark the tokens as unreserved, mark the
+  // contribution as completed
+  ledger_->ContributionCompleted(
+      ledger::Result::LEDGER_ERROR,
+      contribution->amount,
+      contribution->contribution_id,
+      contribution->type);
 }
 
 void Contribution::Retry(
