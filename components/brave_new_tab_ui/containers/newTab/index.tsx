@@ -535,9 +535,9 @@ class NewTabPage extends React.Component<Props, State> {
 
   renderTogetherWidget (showContent: boolean) {
     const { newTabData } = this.props
-    const { showTogether, textDirection } = newTabData
+    const { showTogether, textDirection, userRegion } = newTabData
 
-    if (!showTogether) {
+    if (!showTogether || userRegion !== 'us') {
       return null
     }
 
@@ -614,6 +614,7 @@ class NewTabPage extends React.Component<Props, State> {
     const isShowingBrandedWallpaper = newTabData.brandedWallpaperData ? true : false
     const showTopSites = !!this.props.gridSitesData.gridSites.length && newTabData.showTopSites
     const cryptoContent = this.renderCryptoContent()
+    const isUS = newTabData.userRegion === 'us'
 
     return (
       <Page.App dataIsReady={newTabData.initialDataLoaded}>
@@ -634,7 +635,7 @@ class NewTabPage extends React.Component<Props, State> {
             showClock={newTabData.showClock}
             showStats={newTabData.showStats}
             showRewards={!!cryptoContent}
-            showTogether={newTabData.showTogether}
+            showTogether={newTabData.showTogether && isUS}
             showBinance={newTabData.showBinance}
             showTopSites={showTopSites}
             showBrandedWallpaper={isShowingBrandedWallpaper}
@@ -712,7 +713,7 @@ class NewTabPage extends React.Component<Props, State> {
               showStats={newTabData.showStats}
               showTopSites={newTabData.showTopSites}
               showRewards={newTabData.showRewards}
-              showTogether={newTabData.showTogether}
+              showTogether={newTabData.showTogether && isUS}
               showBinance={newTabData.showBinance}
               brandedWallpaperOptIn={newTabData.brandedWallpaperOptIn}
               allowSponsoredWallpaperUI={newTabData.featureFlagBraveNTPSponsoredImagesWallpaper}

@@ -94,6 +94,7 @@ declare namespace NewTab {
   }
 
   export interface PersistentState {
+    userRegion: BinanceTLD
     showEmptyPage: boolean
     rewardsState: RewardsWidgetState
     currentStackWidget: StackWidget
