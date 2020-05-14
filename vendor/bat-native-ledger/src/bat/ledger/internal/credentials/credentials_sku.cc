@@ -113,9 +113,17 @@ void CredentialsSKU::OnStart(
   }
 
   switch (status) {
-    case ledger::CredsBatchStatus::NONE:
-    case ledger::CredsBatchStatus::BLINDED: {
+    case ledger::CredsBatchStatus::NONE: {
       Blind(trigger, callback);
+      break;
+    }
+    case ledger::CredsBatchStatus::BLINDED: {
+      auto get_callback = std::bind(&CredentialsSKU::Claim,
+          this,
+          _1,
+          trigger,
+          callback);
+      ledger_->GetCredsBatchByTrigger(trigger.id, trigger.type, get_callback);
       break;
     }
     case ledger::CredsBatchStatus::CLAIMED: {
@@ -145,32 +153,70 @@ void CredentialsSKU::OnStart(
 void CredentialsSKU::Blind(
     const CredentialsTrigger& trigger,
     ledger::ResultCallback callback) {
-  auto blinded_callback = std::bind(&CredentialsSKU::Claim,
+  auto blinded_callback = std::bind(&CredentialsSKU::OnBlind,
       this,
       _1,
-      _2,
       trigger,
       callback);
   common_->GetBlindedCreds(trigger, blinded_callback);
 }
 
-void CredentialsSKU::Claim(
+void CredentialsSKU::OnBlind(
     const ledger::Result result,
-    const std::string& blinded_creds_json,
     const CredentialsTrigger& trigger,
     ledger::ResultCallback callback) {
   if (result != ledger::Result::LEDGER_OK) {
-    BLOG(ledger_, ledger::LogLevel::LOG_ERROR) << "Claim failed";
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR) << "Blinding failed";
     callback(result);
     return;
   }
 
-  auto blinded_creds = ParseStringToBaseList(blinded_creds_json);
+  auto get_callback = std::bind(&CredentialsSKU::Claim,
+      this,
+      _1,
+      trigger,
+      callback);
+  ledger_->GetCredsBatchByTrigger(trigger.id, trigger.type, get_callback);
+}
+
+void CredentialsSKU::RetryPreviousStepSaved(
+    const ledger::Result result,
+    ledger::ResultCallback callback) {
+    if (result != ledger::Result::LEDGER_OK) {
+      BLOG(ledger_, ledger::LogLevel::LOG_ERROR) << "Previous step not saved";
+      callback(ledger::Result::LEDGER_ERROR);
+      return;
+    }
+
+    callback(ledger::Result::RETRY);
+}
+
+void CredentialsSKU::Claim(
+    ledger::CredsBatchPtr creds,
+    const CredentialsTrigger& trigger,
+    ledger::ResultCallback callback) {
+  if (!creds) {
+    BLOG(ledger_, ledger::LogLevel::LOG_ERROR) << "Creds not found";
+    callback(ledger::Result::LEDGER_ERROR);
+    return;
+  }
+
+  auto blinded_creds = ParseStringToBaseList(creds->blinded_creds);
 
   if (!blinded_creds || blinded_creds->empty()) {
     BLOG(ledger_, ledger::LogLevel::LOG_ERROR)
-        << "Blinded creds are corrupted";
-    callback(ledger::Result::RETRY);
+        << "Blinded creds are corrupted, we will try to blind again";
+    auto save_callback =
+        std::bind(&CredentialsSKU::RetryPreviousStepSaved,
+            this,
+            _1,
+            callback);
+
+    ledger_->UpdateCredsBatchStatus(
+        trigger.id,
+        trigger.type,
+        ledger::CredsBatchStatus::NONE,
+        save_callback);
     return;
   }
 
