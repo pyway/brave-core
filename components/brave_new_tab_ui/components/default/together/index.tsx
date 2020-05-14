@@ -3,6 +3,7 @@
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
+import * as Crypto from 'crypto'
 import createWidget from '../widget/index'
 import { getLocale } from '../../../../common/locale'
 
@@ -56,16 +57,15 @@ class Together extends React.PureComponent<Props, {}> {
     )
   }
 
-  newRoom() {
-    return 'bxxxxxxx'.replace(/[xy]/g, (c) => {
-      let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
-      return v.toString(16)
-    })
-  }
-
   shouldCreateCall = (event: any) => {
     event.preventDefault()
-    window.open(`https://together.brave.com/${this.newRoom()}`, '_self')
+
+    Crypto.randomBytes(32, (err, buffer) => {
+      if (!err) {
+        const name = buffer.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '')
+        window.open(`https://together.brave.com/${name}`, '_self')
+      }
+    });
   }
 
   render () {
