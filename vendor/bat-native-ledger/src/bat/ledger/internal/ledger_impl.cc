@@ -385,7 +385,7 @@ void LedgerImpl::OnLedgerStateLoaded(
   if (result == ledger::Result::LEDGER_OK) {
     if (!bat_state_->LoadState(data)) {
       BLOG(0, "Successfully loaded but failed to parse ledger state.");
-      BLOG(2, "Failed ledger state: " << data);
+      BLOG(1, "Failed ledger state: " << data);
 
       callback(ledger::Result::INVALID_LEDGER_STATE);
     } else {
@@ -402,7 +402,7 @@ void LedgerImpl::OnLedgerStateLoaded(
   }
   if (result != ledger::Result::NO_LEDGER_STATE) {
     BLOG(0, "Failed to load ledger state");
-    BLOG(2, "Failed ledger state: " << data);
+    BLOG(1, "Failed ledger state: " << data);
   }
   callback(result);
 }
@@ -453,13 +453,13 @@ void LedgerImpl::OnPublisherStateLoaded(
   if (result == ledger::Result::LEDGER_OK) {
     if (!bat_publisher_->loadState(data)) {
       BLOG(0, "Successfully loaded but failed to parse ledger state.");
-      BLOG(2, "Failed publisher state: " << data);
+      BLOG(1, "Failed publisher state: " << data);
 
       result = ledger::Result::INVALID_PUBLISHER_STATE;
     }
   } else {
     BLOG(0, "Failed to load publisher state");
-    BLOG(2, "Failed publisher state: " << data);
+    BLOG(1, "Failed publisher state: " << data);
   }
 
   if (GetPaymentId().empty() || GetWalletPassphrase().empty()) {

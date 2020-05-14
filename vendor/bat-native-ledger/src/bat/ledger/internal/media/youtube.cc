@@ -349,8 +349,8 @@ void YouTube::ProcessMedia(const std::map<std::string, std::string>& parts,
                                                          YOUTUBE_MEDIA_TYPE);
   uint64_t duration = GetMediaDurationFromParts(parts, media_key);
 
-  BLOG(2, "Media key: " << media_key);
-  BLOG(2, "Media duration: " << duration);
+  BLOG(1, "Media key: " << media_key);
+  BLOG(1, "Media duration: " << duration);
 
   ledger_->GetMediaPublisherInfo(
       media_key,
